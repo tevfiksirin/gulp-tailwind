@@ -1,0 +1,35 @@
+{
+  "name": "gulp-tailwind",
+  "description": "Gulp tailwind project template",
+  "author": "Bojan Gabric <bojan@bojangabric.com>",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aos": "3.0.0-beta.6",
+    "flickity": "2.2.0",
+    "jquery": "3.5.1",
+    "smooth-scroll": "16.0.3",
+    "tailwindcss": "^1.7.6"
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.3.0",
+    "autoprefixer": "^9.8.6",
+    "browser-sync": "2.26.7",
+    "del": "4.1.1",
+    "gulp": "4.0.2",
+    "gulp-cached": "1.1.1",
+    "gulp-clean-css": "4.2.0",
+    "gulp-file-include": "2.0.1",
+    "gulp-if": "2.0.2",
+    "gulp-npm-dist": "1.0.3",
+    "gulp-postcss": "^8.0.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "1.0.0",
+    "gulp-sass": "4.0.2",
+    "gulp-uglify": "3.0.2",
+    "gulp-useref": "3.1.6",
+    "postcss-import": "^12.0.1"
+  }
+}
