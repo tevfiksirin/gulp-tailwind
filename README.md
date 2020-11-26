@@ -8,9 +8,7 @@
     git clone https://github.com/bojangabric/gulp-tailwind
     ```
 
-2.  **Run the following commands to setup everything**
-
-    Navigate into your new site’s directory and start it up.
+2.  **Navigate into your new site’s directory and start it up**
 
     ```shell
     cd gulp-tailwind
