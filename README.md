@@ -13,7 +13,7 @@
     ```shell
     cd gulp-tailwind
     npm install
-    npm run dev
+    gulp
     ```
 
 3.  **Open the source code and start editing**
