@@ -16,6 +16,6 @@
     npm run dev
     ```
 
-3.  **Open the source code and start editing!**
+3.  **Open the source code and start editing**
 
     Your site is now running at `http://localhost:3000`!
