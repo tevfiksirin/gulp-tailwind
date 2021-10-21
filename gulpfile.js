@@ -80,7 +80,7 @@ const paths = {
 // Tasks ===================================
 //
 
-gulp.task('browsersync', function (callback) {
+gulp.task('browsersync', callback => {
   browsersync.init({
     server: {
       baseDir: [paths.src.tmp.dir, paths.src.base.dir, paths.base.base.dir]
@@ -89,29 +89,29 @@ gulp.task('browsersync', function (callback) {
   callback();
 });
 
-gulp.task('browsersyncReload', function (callback) {
+gulp.task('browsersyncReload', callback => {
   browsersync.reload();
   callback();
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', () => {
   gulp.watch([paths.src.scss.files, paths.src.html.files], gulp.series('scss', 'browsersyncReload'));
   gulp.watch([paths.src.js.files, paths.src.img.files], gulp.series('browsersyncReload'));
   gulp.watch([paths.src.html.files, paths.src.partials.files], gulp.series('fileinclude', 'browsersyncReload'));
 });
 
-gulp.task('scss', function () {
-  return gulp
+gulp.task('scss', () =>
+  gulp
     .src(paths.src.scss.main)
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest(paths.src.tmp.dir))
     .pipe(postcss([tailwindcss(TAILWIND_CONFIG), require('autoprefixer')]))
     .pipe(concat({ path: 'theme.css' }))
-    .pipe(gulp.dest(paths.src.css.dir));
-});
+    .pipe(gulp.dest(paths.src.css.dir))
+);
 
-gulp.task('fileinclude', function (callback) {
-  return gulp
+gulp.task('fileinclude', () =>
+  gulp
     .src([paths.src.html.files, '!' + paths.src.tmp.files, '!' + paths.src.partials.files])
     .pipe(
       fileinclude({
@@ -121,21 +121,21 @@ gulp.task('fileinclude', function (callback) {
       })
     )
     .pipe(cached())
-    .pipe(gulp.dest(paths.src.tmp.dir));
-});
+    .pipe(gulp.dest(paths.src.tmp.dir))
+);
 
-gulp.task('clean:tmp', function (callback) {
+gulp.task('clean:tmp', callback => {
   del.sync(paths.src.tmp.dir);
   callback();
 });
 
-gulp.task('clean:dist', function (callback) {
+gulp.task('clean:dist', callback => {
   del.sync(paths.dist.base.dir);
   callback();
 });
 
-gulp.task('copy:all', function () {
-  return gulp
+gulp.task('copy:all', () =>
+  gulp
     .src([
       paths.src.base.files,
       '!' + paths.src.partials.dir,
@@ -150,15 +150,13 @@ gulp.task('copy:all', function () {
       '!' + paths.src.css.files,
       '!' + paths.src.html.files
     ])
-    .pipe(gulp.dest(paths.dist.base.dir));
-});
+    .pipe(gulp.dest(paths.dist.base.dir))
+);
 
-gulp.task('copy:libs', function () {
-  return gulp.src(npmdist(), { base: paths.base.node.dir }).pipe(gulp.dest(paths.dist.libs.dir));
-});
+gulp.task('copy:libs', () => gulp.src(npmdist(), { base: paths.base.node.dir }).pipe(gulp.dest(paths.dist.libs.dir)));
 
-gulp.task('html', function () {
-  return gulp
+gulp.task('html', () =>
+  gulp
     .src([paths.src.html.files, '!' + paths.src.tmp.files, '!' + paths.src.partials.files])
     .pipe(
       fileinclude({
@@ -173,8 +171,8 @@ gulp.task('html', function () {
     .pipe(cached())
     .pipe(gulpif('*.js', uglify()))
     .pipe(gulpif('*.css', cleancss()))
-    .pipe(gulp.dest(paths.dist.base.dir));
-});
+    .pipe(gulp.dest(paths.dist.base.dir))
+);
 
 gulp.task('build', gulp.series(gulp.parallel('clean:tmp', 'clean:dist', 'copy:all', 'copy:libs'), 'scss', 'html'));
 
