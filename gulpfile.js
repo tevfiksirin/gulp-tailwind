@@ -7,18 +7,13 @@ const gulp = require('gulp');
 const gulpif = require('gulp-if');
 const npmdist = require('gulp-npm-dist');
 const replace = require('gulp-replace');
-const sass = require('gulp-sass');
-const uglify = require('gulp-uglify-es');
+const sass = require('gulp-sass')(require('sass'));
+const uglify = require('gulp-uglify-es').default;
+const concat = require('gulp-concat');
 const useref = require('gulp-useref');
 const postcss = require('gulp-postcss');
-const atimport = require('postcss-import');
-const purgecss = require('@fullhuman/postcss-purgecss');
 const tailwindcss = require('tailwindcss');
-const rename = require('gulp-rename');
-
 const TAILWIND_CONFIG = './tailwind.config.js';
-const SOURCE_STYLESHEET = './src/assets/css/theme.css';
-const DESTINATION_STYLESHEET = './dist/assets/css';
 
 // Define paths
 const paths = {
@@ -100,7 +95,7 @@ gulp.task('browsersyncReload', function (callback) {
 });
 
 gulp.task('watch', function () {
-  gulp.watch(paths.src.scss.files, gulp.series('scss'));
+  gulp.watch([paths.src.scss.files, paths.src.html.files], gulp.series('scss', 'browsersyncReload'));
   gulp.watch([paths.src.js.files, paths.src.img.files], gulp.series('browsersyncReload'));
   gulp.watch([paths.src.html.files, paths.src.partials.files], gulp.series('fileinclude', 'browsersyncReload'));
 });
@@ -109,26 +104,10 @@ gulp.task('scss', function () {
   return gulp
     .src(paths.src.scss.main)
     .pipe(sass().on('error', sass.logError))
-    .pipe(postcss([require('tailwindcss'), require('autoprefixer')]))
-    .pipe(gulp.dest(paths.src.css.dir))
-    .pipe(browsersync.stream());
-});
-
-gulp.task('purge', function () {
-  return gulp
-    .src(SOURCE_STYLESHEET)
-    .pipe(
-      postcss([
-        atimport(),
-        tailwindcss(TAILWIND_CONFIG),
-        purgecss({
-          content: ['./dist/**/*.html']
-        })
-      ])
-    )
-    .pipe(rename('theme.min.css'))
-    .pipe(cleancss())
-    .pipe(gulp.dest(DESTINATION_STYLESHEET));
+    .pipe(gulp.dest(paths.src.tmp.dir))
+    .pipe(postcss([tailwindcss(TAILWIND_CONFIG), require('autoprefixer')]))
+    .pipe(concat({ path: 'theme.css' }))
+    .pipe(gulp.dest(paths.src.css.dir));
 });
 
 gulp.task('fileinclude', function (callback) {
@@ -147,11 +126,6 @@ gulp.task('fileinclude', function (callback) {
 
 gulp.task('clean:tmp', function (callback) {
   del.sync(paths.src.tmp.dir);
-  callback();
-});
-
-gulp.task('clean:packageLock', function (callback) {
-  del.sync(paths.base.packageLock.files);
   callback();
 });
 
@@ -202,14 +176,6 @@ gulp.task('html', function () {
     .pipe(gulp.dest(paths.dist.base.dir));
 });
 
-gulp.task(
-  'build',
-  gulp.series(
-    gulp.parallel('clean:tmp', 'clean:packageLock', 'clean:dist', 'copy:all', 'copy:libs'),
-    'scss',
-    'html',
-    'purge'
-  )
-);
+gulp.task('build', gulp.series(gulp.parallel('clean:tmp', 'clean:dist', 'copy:all', 'copy:libs'), 'scss', 'html'));
 
 gulp.task('default', gulp.series(gulp.parallel('fileinclude', 'scss'), gulp.parallel('browsersync', 'watch')));
