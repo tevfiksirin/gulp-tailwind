@@ -3,3 +3,14 @@
 @tailwind components;
 
 @tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Ageo';
+    font-weight: 500;
+    src: url('/assets/fonts/AgeoPersonalUse.otf') format('OpenType');
+  }
+}
+.container {
+  max-width: 1170px;
+}
