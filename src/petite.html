@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    @@include("partials/head.html")
+  </head>
+  <body>
+    @@include("partials/nav.html")
+    <div id="app1" v-scope v-effect="fetchData()">
+      <table>
+        <tr>
+          <th>Takım</th>
+          <th>Maç Sayısı</th>
+          <th>Puan</th>
+          <th>Galibiyet</th>
+          <th>Mağlubiyet</th>
+          <th>Beraberlik</th>
+        </tr>
+        <tr v-for="(item, index) in puanlar" :key="index">
+          <td class="teamName">
+            <img :src="item.team.logos[0].href" :alt="item.team.name + ' Logo'" /> {{ item.team.name }}
+          </td>
+          <td>{{ item.stats.filter((name) => name.name == "gamesPlayed")[0].value }}</td>
+          <td>{{ item.stats.filter((name) => name.name == "points")[0].value }}</td>
+          <td>{{ item.stats.filter((name) => name.name == "wins")[0].value }}</td>
+          <td>{{ item.stats.filter((name) => name.name == "losses")[0].value }}</td>
+          <td>{{ item.stats.filter((name) => name.name == "ties")[0].value }}</td>
+        </tr>
+      </table>
+    </div>
+    <!-- Scripts -->
+    @@include("partials/scripts.html")
+    <script>
+      PetiteVue.createApp({
+        // exposed to all expressions
+        puanlar: [],
+        fetchData() {
+          fetch('https://api-football-standings.azharimm.site/leagues/tur.1/standings?season=2021&sort=asc')
+            .then(res => res.json())
+            .then(data => {
+              console.log(data.data.standings);
+              this.puanlar = data.data.standings;
+            });
+        }
+      }).mount('#app1');
+    </script>
+  </body>
+</html>

@@ -12,6 +12,51 @@
 <!-- Theme CSS -->
 <!-- build:css @@webRoot/assets/css/theme.min.css -->
 <link rel="stylesheet" href="@@webRoot/assets/css/theme.css" />
+<script src="https://unpkg.com/petite-vue"></script>
 <!-- endbuild -->
+<style>
+  #app1 {
+    width: 960px;
+    margin: 0 auto;
+  }
 
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #ddeedd;
+    text-align: left;
+    padding: 8px !important;
+    vertical-align: middle !important;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+
+  td.teamLogo {
+    text-align: center;
+  }
+
+  td.teamLogo img {
+    width: 50px;
+  }
+
+  td img {
+    width: 50px;
+  }
+
+  td.teamName {
+    display: flex;
+    align-items: center;
+  }
+
+  td.teamName img {
+    margin-right: 5px;
+  }
+</style>
 <title></title>

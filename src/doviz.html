@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    @@include("partials/head.html")
+  </head>
+  <body>
+    @@include("partials/nav.html")
+    <div id="app1" v-scope v-effect="fetchData()">
+  {{puanlar}}
+  </div>
+    </div>
+    <!-- Scripts -->
+    @@include("partials/scripts.html")
+    <script>
+      PetiteVue.createApp({
+        // exposed to all expressions
+        puanlar: [],
+        fetchData() {
+          fetch('https://finans.truncgil.com/today.json')
+            .then(res => res.json())
+            .then(data => {
+              console.log(data.data.standings);
+              this.puanlar = data.data.standings;
+            });
+        }
+      }).mount('#app1');
+    </script>
+  </body>
+</html>
